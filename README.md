@@ -12,6 +12,8 @@ $ docker compose up -d workspace bash
 ```bash
 $ gem install rails
 $ rails new . --database=mysql
+$ docker/_tools/setup_database_yml.sh
+$ rails db:setup
 ```
 
 ```bash
