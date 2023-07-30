@@ -87,3 +87,53 @@ $ docker compose up -d rails
 ```
 
 ブラウザで http://localhost:3000 にアクセスすると、Rails のデフォルトページが表示されます。
+
+## 開発中の手順
+
+### Generate コマンドや rake タスクを実行する
+
+`rails g` や `rails db:migrate` などのコマンドは `workspace` コンテナ内で実行します。下記はそうしたコマンドの一例です。
+
+```bash
+$ rails db:migrate
+$ rails g model User name:string
+$ rails your:rake_task
+```
+
+実行後に Rails の再起動を要するコマンドの場合は、`rails` コンテナと `sidekiq` コンテナ（使用している場合）を再起動します。
+
+```bash
+$ docker compose restart rails sidekiq
+```
+
+### binding.irb を使う
+
+`rails` コンテナが起動している状態で下記のコマンドを実行し、コンテナの ID を調べます。
+
+```bash
+$ docker ps
+```
+
+調べたコンテナの ID を使って、下記のコマンドを実行します。
+
+```bash
+$ docker attach 
+```
+
+attach したコンテナから抜ける場合は `Ctrl+P` → `Ctrl+Q` を押します。`Ctrl+C` を押すと `rails` コンテナ自体が終了してしまうので注意してください。もし終了させてしまった場合は `docker compose up -d rails` で改めて起動してください。
+
+### Gem を追加・削除する
+
+まず `Gemfile` を編集します。
+
+編集が終わったら、`workspace` コンテナ内で `bundle` を実行します。
+
+```bash
+$ bundle
+```
+
+バンドルが終わったら、`rails` コンテナと `sidekiq` コンテナ（使用している場合）を再起動します。
+
+```bash
+$ docker compose restart rails sidekiq
+```
