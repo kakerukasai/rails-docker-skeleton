@@ -106,9 +106,29 @@ $ rails your:rake_task
 $ docker compose restart rails sidekiq
 ```
 
+### rails c を使う
+
+`rails c` も `workspace` コンテナ内で実行します。
+
+```bash
+$ docker compose exec workspace bash
+```
+
+```bash
+$ rails c
+```
+
 ### binding.irb を使う
 
-`rails` コンテナが起動している状態で下記のコマンドを実行し、コンテナの ID を調べます。
+`rails` コンテナが起動している状態で、ローカル環境から下記のスクリプトを実行するだけで、`rails` コンテナの ID を調べ、そこへ attach します。
+
+```bash
+$ docker/attach
+```
+
+もしうまく動かない場合、下記の通り手動での attach を試してください。
+
+ローカル環境で下記のコマンドを実行し、コンテナの ID を調べます。
 
 ```bash
 $ docker ps
@@ -117,7 +137,7 @@ $ docker ps
 調べたコンテナの ID を使って、下記のコマンドを実行します。
 
 ```bash
-$ docker attach 
+$ docker attach {コンテナ ID}
 ```
 
 attach したコンテナから抜ける場合は `Ctrl+P` → `Ctrl+Q` を押します。`Ctrl+C` を押すと `rails` コンテナ自体が終了してしまうので注意してください。もし終了させてしまった場合は `docker compose up -d rails` で改めて起動してください。
